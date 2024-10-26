@@ -35,6 +35,6 @@ pipeline airports {
 
   block AirportsLoader oftype SQLiteLoader {
     table: "airports";
-    file: "../zmisc_files/airports.sqlite"; // path is to my locally configured gitignore file (don't think data should be uploaded to git). database name is same as instructed in the exercise.
+    file: "../zmisc_files/airports.sqlite"; // path is to my locally configured gitignore file (don't think data should be uploaded to git). database name is same as instructed in the exercise..
   }
 }
