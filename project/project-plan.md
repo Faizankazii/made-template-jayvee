@@ -33,7 +33,7 @@ The EPA Greenhouse Gas Reporting Program (GHGRP) provides data on greenhouse gas
 
 <!-- List of work packages ordered sequentially, each pointing to an issue with more details. -->
 
-1. Example Issue [#1][i1]
-2. ...
-
-[i1]: https://github.com/jvalue/made-template/issues/1
+1. **Data Collection and Preprocessing** 
+2. **Data Analysis and Modeling** 
+3. **Visualization and Reporting**
+4. **Project Documentation and Final Review**
