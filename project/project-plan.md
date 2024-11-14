@@ -23,15 +23,15 @@ The project will analyze whether cities with larger populations have more Airbnb
 <!-- Describe each datasources you plan to use in a section. Use the prefic "DatasourceX" where X is the id of the datasource. -->
 
 ### Datasource1: Airbnb Dataset
-* Metadata URL: https://catalog.data.gov/dataset/complete-2010-greenhouse-gas-data
-* Data URL: https://www.epa.gov/system/files/other-files/2024-10/2023_data_summary_spreadsheets.zip
+* Metadata URL: https://www.kaggle.com/datasets/kritikseth/us-airbnb-open-data/data
+* Data URL: https://shorturl.at/JCGL2
 * Data Type: CSV
 
 Contains Airbnb data for US cities, including city name, listing count, room types, average price, and availability metrics.
 
 ### Datasource1: US Cities Demographics Dataset
-* Metadata URL: https://catalog.data.gov/dataset/complete-2010-greenhouse-gas-data
-* Data URL: https://www.epa.gov/system/files/other-files/2024-10/2023_data_summary_spreadsheets.zip
+* Metadata URL: https://simplemaps.com/data/us-cities
+* Data URL: https://simplemaps.com/static/data/us-cities/1.79/basic/simplemaps_uscities_basicv1.79.zip
 * Data Type: CSV
 
 Includes population and density data for US cities, helping to contextualize Airbnb trends based on demographic factors
