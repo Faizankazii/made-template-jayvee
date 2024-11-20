@@ -57,12 +57,12 @@ pipeline economy {
 
   block bondIssuanceLoader oftype SQLiteLoader {
     table: "bondIssuance";
-    file: "./economy.sqlite";
+    file: "./country-stats.sqlite";
   }
 
   block gdpPerCapita oftype SQLiteLoader {
     table: "gdpPerCapita";
-    file: "./economy.sqlite";
+    file: "./country-stats.sqlite";
   }
 
 }
