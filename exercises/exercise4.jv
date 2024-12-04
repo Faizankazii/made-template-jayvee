@@ -1,0 +1,95 @@
+pipeline Battery {
+    BatteryExtractor
+        -> ZipArchiveInterpreter
+        -> FilePicker
+        -> BatteryTextFileInterpreter
+        -> BatteryCSVInterpreter
+        -> RenameRange
+        -> RenameBatteryTemp
+        -> BatteryTableInterpreter
+        -> TempTransformer
+        -> BatteryTempTransformer
+        -> BatteryLoader;
+
+
+
+    block BatteryExtractor oftype HttpExtractor {
+        url: "https://www.mowesta.com/data/measure/mowesta-dataset-20221107.zip";
+    }
+
+    block ZipArchiveInterpreter oftype ArchiveInterpreter {
+   archiveType: "zip";
+    }
+
+    block FilePicker oftype FilePicker {
+    path: "./data.csv";
+    }
+
+    block BatteryTextFileInterpreter oftype TextFileInterpreter { } //output -> TextFile
+
+    block BatteryCSVInterpreter oftype CSVInterpreter {  //input -> TextFile, output -> sheet
+        delimiter: ';';
+    }
+
+    block RenameRange oftype CellWriter {
+        at: range A1:E1;
+        write: ["id", "producer", "model", "month", "temperature"];
+    }
+
+    block RenameBatteryTemp oftype CellWriter {
+        at: cell J1;
+        write: ["battery_temperature"];
+    }
+
+    block BatteryTableInterpreter oftype TableInterpreter { //input -> sheet
+    header: true;
+    columns: [
+        "id" oftype valid_int,
+        "producer" oftype text,
+        "model" oftype text,
+        "month" oftype valid_month,
+        "temperature" oftype decimal,
+        "battery_temperature" oftype decimal,
+        ];
+    }
+
+
+    transform CelsiusToFahrenheit {
+    from Celsius oftype decimal;
+    to Fahrenheit oftype decimal;
+
+    Fahrenheit: (Celsius * 9/5) + 32;
+    }
+
+    block TempTransformer oftype TableTransformer {
+    inputColumns: ['temperature'];
+    outputColumn: 'temperature';
+    uses: CelsiusToFahrenheit;
+    }
+
+    block BatteryTempTransformer oftype TableTransformer {
+    inputColumns: ['battery_temperature'];
+    outputColumn: 'battery_temperature';
+    uses: CelsiusToFahrenheit;
+    }
+
+    block BatteryLoader oftype SQLiteLoader {
+        table: "temperatures";
+        file: "./temperatures.sqlite";
+    }
+
+}
+
+valuetype valid_int oftype integer {
+  constraints: [
+    Validint
+  ];
+}
+constraint Validint on integer: value >= 0;
+
+valuetype valid_month oftype integer {
+  constraints: [
+    Validmonth
+  ];
+}
+constraint Validmonth on integer: value >= 1 and value <= 12;
