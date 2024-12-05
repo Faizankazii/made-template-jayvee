@@ -3,8 +3,8 @@ import click
 
 class MakeData():
     def __init__(self) -> None:
-        self.airbnb_df = pd.read_csv('airbnb_data/AB_US_2023.csv', low_memory=False)
-        self.cities_df = pd.read_csv('uscities/uscities.csv', low_memory=False)
+        self.airbnb_df = pd.read_csv('../data/airbnb_data/AB_US_2023.csv', low_memory=False)
+        self.cities_df = pd.read_csv('../data/uscities/uscities.csv', low_memory=False)
         self.merged_df = pd.DataFrame()
 
     def clean_airbnb(self):
@@ -81,7 +81,7 @@ def main():
     MAKE = MakeData()
     MAKE.process()
     data = MAKE.get_merged_data()
-    data.to_csv("Final_data.csv", index=False)
+    data.to_csv("../data/Final_data.csv", index=False)
 
 if __name__ == "__main__":
     main()
