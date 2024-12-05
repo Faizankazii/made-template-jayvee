@@ -4,6 +4,9 @@ RED='\033[0;31m'
 YELLOW='\033[0;33m'
 NC='\033[0m'
 
+echo -e "${YELLOW}Installing Python dependencies from requirements.txt...${NC}"
+pip install -r requirements.txt
+
 echo "${YELLOW}Executing pipeline...${NC}"
 sh pipeline.sh
 
