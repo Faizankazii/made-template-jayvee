@@ -15,11 +15,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: List Files
-        run: |
-          ls -R
-
       - name: Run tests.sh
+        working-directory: ./project
         run: |
           chmod +x ./project/tests.sh
           ./project/tests.sh
