@@ -6,7 +6,7 @@ NC='\033[0m'
 
 ls
 
-echo -e "${YELLOW}Installing Python dependencies from requirements.txt.....${NC}"
+echo -e "${YELLOW}Installing Python dependencies from requirements.txt....${NC}"
 pip install -r requirements.txt
 
 echo "${YELLOW}Executing pipeline...${NC}"
