@@ -1,0 +1,22 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - project/**
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run tests.sh
+        run: |
+          chmod +x ./project/tests.sh
+          ./project/tests.sh
