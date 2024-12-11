@@ -16,6 +16,9 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
+      - name: Set Working Directory
+        working-directory: ./project
+
       - name: Run tests.sh
         run: |
           chmod +x project/tests.sh
