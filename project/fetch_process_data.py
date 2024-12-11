@@ -81,7 +81,7 @@ def main():
     MAKE = MakeData()
     MAKE.process()
     data = MAKE.get_merged_data()
-    data.to_csv("../data/Final_data.csv", index=False)
+    data.to_csv("Final_data.csv", index=False)
 
 if __name__ == "__main__":
     main()

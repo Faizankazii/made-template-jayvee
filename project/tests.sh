@@ -15,7 +15,7 @@ sh pipeline.sh
 echo "${YELLOW}Running tests...${NC}"
 
 echo "${YELLOW}Testcase 1 : Checking if airbnb data exists..${NC}"
-if [ -f "../data/airbnb_data/AB_US_2020.csv" ]; then
+if [ -f "airbnb_data/AB_US_2020.csv" ]; then
     echo "${GREEN}Testcase 1 Passed: airbnb data exists.${NC}"
 else
     echo "${RED}Testcase 1 Failed: airbnb data does not exist. Exiting....${NC}"
@@ -23,7 +23,7 @@ else
 fi
 
 echo "${YELLOW}Testcase 2 : Checking if cities data exists..${NC}"
-if [ -f "../data/uscities/uscities.csv" ]; then
+if [ -f "uscities/uscities.csv" ]; then
     echo "${GREEN}Testcase 2 Passed: cities data exists.${NC}"
 else
     echo "${RED}Testcase 2 Failed: cities data does not exist. Exiting....${NC}"
@@ -31,7 +31,7 @@ else
 fi
 
 echo "${YELLOW}Testcase 3 : Checking if final output file exists..${NC}"
-if [ -f "../data/Final_data.csv" ]; then
+if [ -f "Final_data.csv" ]; then
     echo "${GREEN}Testcase 3 Passed: Final_data.csv exists.${NC}"
 else
     echo "${RED}Testcase 3 Failed: Final_data.csv does not exist. Exiting....${NC}"
@@ -40,7 +40,7 @@ fi
 
 echo "${YELLOW}Testcase 4 : Checking if the structure of final data is correct...${NC}"
 
-column_count=$(head -n 1 ../data/Final_data.csv | awk -F',' '{print NF}')
+column_count=$(head -n 1 Final_data.csv | awk -F',' '{print NF}')
 expected_columns=9
 
 if [ "$column_count" -eq "$expected_columns" ]; then
