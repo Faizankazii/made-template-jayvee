@@ -12,9 +12,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-
       - name: Checkout Code
         uses: actions/checkout@v4
+
+      - name: List Files
+        run: |
+          ls -R
 
       - name: Run tests.sh
         run: |
