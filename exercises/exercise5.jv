@@ -1,0 +1,75 @@
+pipeline Stop {
+    StopExtractor
+        -> ZipArchiveInterpreter
+        -> FilePicker
+        -> StopTextFileInterpreter
+        -> StopCSVInterpreter
+        -> StopTableInterpreter
+        -> StopLoader;
+
+
+
+    block StopExtractor oftype HttpExtractor {
+        url: "https://gtfs.rhoenenergie-bus.de/GTFS.zip";
+    }
+
+    block ZipArchiveInterpreter oftype ArchiveInterpreter {
+   archiveType: "zip";
+    }
+
+    block FilePicker oftype FilePicker {
+    path: "./stops.txt";
+    }
+
+    block StopTextFileInterpreter oftype TextFileInterpreter { } //output -> TextFile
+
+    block StopCSVInterpreter oftype CSVInterpreter {  //input -> TextFile, output -> sheet
+        enclosing: '"';
+    }
+
+    block StopTableInterpreter oftype TableInterpreter { //input -> sheet
+    header: true;
+    columns: [
+            "stop_id" oftype integer,
+            "stop_name" oftype ValidText,
+            "stop_lat" oftype ValidCoord,
+            "stop_lon" oftype ValidCoord,
+            "zone_id" oftype ValidZone
+        ];
+    }
+
+    block StopLoader oftype SQLiteLoader {
+        table: "stops";
+        file: "./gtfs.sqlite";
+    }
+}
+
+valuetype ValidZone oftype integer {
+    constraints: [
+        valid_zone
+    ];
+}
+
+constraint valid_zone on integer: value == 1925;
+
+
+valuetype ValidCoord oftype decimal {
+    constraints: [
+        valid_coord
+    ];
+}
+
+constraint valid_coord oftype RangeConstraint {
+    lowerBound: -90;
+    lowerBoundInclusive: true;
+    upperBound: 90;
+    upperBoundInclusive: true;
+}
+
+valuetype ValidText oftype text {
+  constraints: [
+    valid_text
+  ];
+}
+
+constraint valid_text on text: value matches /[A-Za-zÄäÖöÜüß]/;
