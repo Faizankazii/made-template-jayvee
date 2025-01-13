@@ -1,10 +1,31 @@
 import pandas as pd
 import click
 
-class MakeData():
+
+
+class Extract():
     def __init__(self) -> None:
         self.airbnb_df = pd.read_csv('airbnb_data/AB_US_2023.csv', low_memory=False)
         self.cities_df = pd.read_csv('uscities/uscities.csv', low_memory=False)
+        self.is_data = False
+        self.merged_df = pd.DataFrame()
+        self.check_data()
+
+    def get_airbnb_data(self) -> pd.DataFrame:
+        return self.airbnb_df
+    
+    def get_cities_df(self) -> pd.DataFrame:
+        return self.cities_df
+    
+    def check_data(self):
+        if len(self.airbnb_df) > 0 and len(self.cities_df) > 0:
+            self.is_data = True
+
+
+class Transform():
+    def __init__(self, airbnb, cities) -> None:
+        self.airbnb_df = airbnb
+        self.cities_df = cities
         self.merged_df = pd.DataFrame()
 
     def clean_airbnb(self):
@@ -77,11 +98,26 @@ class MakeData():
         self.agg_cities()
         self.merge_data()
 
+class load():
+    def __init__(self, data):
+        self.final_df = data
+
+    def dump_data(self):
+        click.secho(f"Saving final data...", bg='yellow')
+        self.final_df.to_csv("Final_data.csv", index=False)
+
 def main():
-    MAKE = MakeData()
-    MAKE.process()
-    data = MAKE.get_merged_data()
-    data.to_csv("Final_data.csv", index=False)
+    EXTRACT = Extract()
+    if EXTRACT.is_data:
+        airbnb_data = EXTRACT.get_airbnb_data()
+        cities_data = EXTRACT.get_cities_df()
+        TRANSFORM = Transform(airbnb_data, cities_data)
+        TRANSFORM.process()
+        final_data = TRANSFORM.get_merged_data()
+        LOAD = load(final_data)
+        LOAD.dump_data()
+    else:
+        click.secho(f"No Data to Transform...", bg='red')
 
 if __name__ == "__main__":
     main()
