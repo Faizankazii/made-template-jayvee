@@ -1,6 +1,8 @@
 import pandas as pd
 import click
-
+import warnings
+warnings.filterwarnings("ignore", category=DeprecationWarning)
+pd.options.mode.chained_assignment = None  # default='warn'
 
 
 class Extract():
@@ -38,7 +40,9 @@ class Transform():
         'Santa Cruz County' : 'Santa Cruz',
         'San Mateo County' : 'San Mateo',
         'Broward County' : 'Florida city',
-        'Clark County' : 'Las Vegas'
+        'Clark County' : 'Las Vegas',
+        'Jersey City': 'New Jersey',
+        'Cambridge': 'Massachusetts'
         }
         try:
             self.airbnb_df['city'] = self.airbnb_df['city'].replace(city_replacements)
@@ -49,18 +53,29 @@ class Transform():
         except Exception as e:
             click.secho(f"Failed processing airbnb data due to {e}", bg='red')
 
+    def remove_outliers(self, group):
+        Q1 = group['price'].quantile(0.10)
+        Q3 = group['price'].quantile(0.99)
+        IQR = Q3 - Q1
+        lower_bound = Q1 - 1.5 * IQR
+        upper_bound = Q3 + 1.5 * IQR
+        return group[(group['price'] >= lower_bound) & (group['price'] <= upper_bound)]
+
     def agg_airbnb(self):
-        click.secho(f"Aggregating airbnb data", bg='magenta')
+        click.secho("Aggregating Airbnb data...", bg='magenta')
+        self.airbnb_df = self.airbnb_df[self.airbnb_df["price"] > 0]
+        self.airbnb_df = self.airbnb_df.groupby('city', group_keys=False).apply(self.remove_outliers)
         self.airbnb_df = self.airbnb_df.groupby('city').agg(
-        price_mean=('price', 'mean'),
-        entire_home_apt_sum=('room_type_Entire home/apt', 'sum'),
-        hotel_room_sum=('room_type_Hotel room', 'sum'),
-        private_room_sum=('room_type_Private room', 'sum'),
-        shared_room_sum=('room_type_Shared room', 'sum'),
-        listing_count=('city', 'size')
+            price_mean=('price', 'mean'),
+            entire_home_apt_sum=('room_type_Entire home/apt', 'sum'),
+            hotel_room_sum=('room_type_Hotel room', 'sum'),
+            private_room_sum=('room_type_Private room', 'sum'),
+            shared_room_sum=('room_type_Shared room', 'sum'),
+            listing_count=('city', 'size')
         )
-        self.airbnb_df = self.airbnb_df.reset_index(drop = False)
-        click.secho(f"Task successful", bg='green')
+        self.airbnb_df = self.airbnb_df.round(2)
+        self.airbnb_df = self.airbnb_df.reset_index(drop=False)
+        click.secho("Task successful", bg='green')
 
     def clean_cities(self):
         click.secho(f"Cleaning cities data", bg='magenta')
@@ -98,6 +113,7 @@ class Transform():
         self.agg_cities()
         self.merge_data()
 
+
 class load():
     def __init__(self, data):
         self.final_df = data
@@ -105,6 +121,7 @@ class load():
     def dump_data(self):
         click.secho(f"Saving final data...", bg='yellow')
         self.final_df.to_csv("Final_data.csv", index=False)
+
 
 def main():
     EXTRACT = Extract()
