@@ -54,8 +54,8 @@ class Transform():
             click.secho(f"Failed processing airbnb data due to {e}", bg='red')
 
     def remove_outliers(self, group):
-        Q1 = group['price'].quantile(0.10)
-        Q3 = group['price'].quantile(0.99)
+        Q1 = group['price'].quantile(0.25)
+        Q3 = group['price'].quantile(0.75)
         IQR = Q3 - Q1
         lower_bound = Q1 - 1.5 * IQR
         upper_bound = Q3 + 1.5 * IQR
@@ -68,7 +68,6 @@ class Transform():
         self.airbnb_df = self.airbnb_df.groupby('city').agg(
             price_mean=('price', 'mean'),
             entire_home_apt_sum=('room_type_Entire home/apt', 'sum'),
-            hotel_room_sum=('room_type_Hotel room', 'sum'),
             private_room_sum=('room_type_Private room', 'sum'),
             shared_room_sum=('room_type_Shared room', 'sum'),
             listing_count=('city', 'size')
