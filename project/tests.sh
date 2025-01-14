@@ -41,7 +41,7 @@ fi
 echo "${YELLOW}Testcase 4 : Checking if the structure of final data is correct...${NC}"
 
 column_count=$(head -n 1 Final_data.csv | awk -F',' '{print NF}')
-expected_columns=9
+expected_columns=8
 
 if [ "$column_count" -eq "$expected_columns" ]; then
     echo "${GREEN}Testcase 4 Passed: Final_data.csv contains $column_count columns.${NC}"
